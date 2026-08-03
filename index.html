@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>WBX0513's GitHub Pages</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WBX0513 - GitHub Page</title>
+    <script>
+        (function () {
+            window.location.replace('en-us/');
+        })();
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f6f8fa;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; color: #24292f; text-align: center;
+        }
+        .redirect-box { padding: 40px; }
+        .redirect-box h1 { font-size: 24px; margin-bottom: 16px; color: #0969da; }
+        .redirect-box p { color: #57606a; margin-bottom: 20px; }
+        .lang-links { display: flex; gap: 16px; justify-content: center; }
+        .lang-links a {
+            display: inline-block; padding: 10px 24px; border-radius: 8px;
+            text-decoration: none; font-weight: 600; font-size: 15px;
+            background: #0969da; color: #fff; transition: background 0.2s;
+        }
+        .lang-links a:hover { background: #0550ae; }
+    </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>这是我的第一个GitHub Pages网站。</p>
+    <div class="redirect-box">
+        <h1>WBX0513</h1>
+        <p>Redirecting to your preferred language...</p>
+        <div class="lang-links">
+            <a href="zh-cn/">中文</a>
+            <a href="en-us/">English</a>
+        </div>
+    </div>
 </body>
 </html>
