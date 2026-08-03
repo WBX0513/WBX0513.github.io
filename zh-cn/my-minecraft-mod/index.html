@@ -180,8 +180,8 @@
         <span>WBX0513 / Peach Crisp</span>
         <div class="nav-right">
             <div class="lang-switch">
-                <a class="active" href="">中文</a>
-                <a href="../../en-us/my-minecraft-mod/">English</a>
+                <a class="active" href="./">中文</a>
+                <a href="/en-us/my-minecraft-mod/">English</a>
             </div>
         </div>
     </nav>
@@ -210,11 +210,12 @@
         </div>
 
         <div class="meta-grid">
-            <div class="meta-card"><div class="label">总下载量</div><div class="value">61</div></div>
-            <div class="meta-card"><div class="label">加载器</div><div class="value">Fabric</div></div>
-            <div class="meta-card"><div class="label">开源协议</div><div class="value">MIT</div></div>
-            <div class="meta-card"><div class="label">运行环境</div><div class="value">Client + Server</div></div>
-            <div class="meta-card"><div class="label">最新版本</div><div class="value">1.2-snapshot-7</div></div>
+            <div class="meta-card"><div class="label">总下载量</div><div class="value" id="meta-downloads">加载中...</div></div>
+            <div class="meta-card"><div class="label">最新版本</div><div class="value" id="meta-version">加载中...</div></div>
+            <div class="meta-card"><div class="label">游戏版本</div><div class="value" id="meta-gamever">加载中...</div></div>
+            <div class="meta-card"><div class="label">加载器</div><div class="value" id="meta-loader">加载中...</div></div>
+            <div class="meta-card"><div class="label">开源协议</div><div class="value" id="meta-license">加载中...</div></div>
+            <div class="meta-card"><div class="label">运行环境</div><div class="value" id="meta-env">加载中...</div></div>
         </div>
 
         <section class="section">
@@ -251,7 +252,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H8l4-5 4 5h-3v4h-2z"/></svg>
                     前往 Modrinth 下载
                 </a>
-                <p style="color:#8c959f; font-size:13px; margin-top:12px;">Fabric · MIT License</p>
+                <p style="color:#8c959f; font-size:13px; margin-top:12px;" id="download-info">加载中...</p>
             </div>
         </section>
     </div>
@@ -259,6 +260,39 @@
     <footer>
         <p>Peach Crisp（桃酥）by WBX0513 · <a href="https://modrinth.com/mod/peach-crisp" target="_blank">Modrinth</a></p>
     </footer>
+
+    <script>
+        fetch('https://api.modrinth.com/v2/project/peach-crisp')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                document.getElementById('meta-downloads').textContent = (data.downloads || 0).toLocaleString();
+                document.getElementById('meta-license').textContent = data.license ? data.license.id || data.license : 'MIT';
+                document.getElementById('meta-env').textContent = data.client_side === 'required' && data.server_side === 'required' ? '客户端 + 服务端' : (data.client_side === 'required' ? '客户端' : '服务端');
+                document.getElementById('download-info').textContent = (data.categories || []).join(' · ');
+                if (data.game_versions && data.game_versions.length > 0) {
+                    document.getElementById('meta-gamever').textContent = data.game_versions.slice(0, 3).join(', ');
+                }
+                if (data.loaders && data.loaders.length > 0) {
+                    document.getElementById('meta-loader').textContent = data.loaders.map(function(l) { return l.charAt(0).toUpperCase() + l.slice(1); }).join(', ');
+                }
+                return fetch('https://api.modrinth.com/v2/project/peach-crisp/version');
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(versions) {
+                if (versions && versions.length > 0) {
+                    document.getElementById('meta-version').textContent = versions[0].version_number || 'N/A';
+                }
+            })
+            .catch(function() {
+                document.getElementById('meta-downloads').textContent = '-';
+                document.getElementById('meta-version').textContent = '-';
+                document.getElementById('meta-gamever').textContent = '-';
+                document.getElementById('meta-loader').textContent = '-';
+                document.getElementById('meta-license').textContent = '-';
+                document.getElementById('meta-env').textContent = '-';
+                document.getElementById('download-info').textContent = '';
+            });
+    </script>
 
 </body>
 </html>
