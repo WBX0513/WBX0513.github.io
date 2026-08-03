@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peach Crisp（桃酥）- Minecraft Mod | WBX0513</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f6f8fa; color: #24292f;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .navbar {
+            width: 100%; background: #fff;
+            border-bottom: 1px solid #d0d7de;
+            padding: 16px 32px;
+            display: flex; align-items: center; gap: 16px;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .navbar .back-btn {
+            color: #0969da; text-decoration: none; font-size: 14px;
+            display: flex; align-items: center; gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .navbar .back-btn:hover { color: #0550ae; }
+
+        .navbar .logo {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #0969da;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: #fff; font-size: 18px;
+        }
+
+        .navbar span { font-weight: 600; font-size: 16px; color: #24292f; }
+
+        .navbar .nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+
+        .lang-switch { display: flex; align-items: center; gap: 4px; }
+
+        .lang-switch a {
+            font-size: 13px; color: #57606a; text-decoration: none;
+            padding: 4px 8px; border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .lang-switch a:hover { color: #0969da; background: #f6f8fa; }
+        .lang-switch a.active { color: #fff; background: #0969da; font-weight: 600; }
+
+        .container { width: 100%; max-width: 900px; padding: 0 24px; margin-top: 40px; }
+
+        .mod-header {
+            display: flex; gap: 24px; align-items: flex-start;
+            margin-bottom: 40px; flex-wrap: wrap;
+        }
+
+        .mod-icon {
+            width: 120px; height: 120px; border-radius: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .mod-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .mod-info { flex: 1; min-width: 280px; }
+
+        .mod-info h1 { font-size: 32px; color: #24292f; margin-bottom: 4px; }
+        .mod-info .subtitle { font-size: 16px; color: #57606a; margin-bottom: 12px; }
+        .mod-info .description { font-size: 15px; color: #24292f; line-height: 1.7; margin-bottom: 16px; }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .tag {
+            background: #f6f8fa; border: 1px solid #d0d7de;
+            border-radius: 6px; padding: 4px 12px;
+            font-size: 12px; color: #57606a;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px; margin-bottom: 40px;
+        }
+
+        .meta-card {
+            background: #fff; border: 1px solid #d0d7de;
+            border-radius: 10px; padding: 16px; text-align: center;
+        }
+
+        .meta-card .label {
+            font-size: 12px; color: #57606a;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+        }
+
+        .meta-card .value { font-size: 18px; font-weight: 600; color: #24292f; }
+
+        .section { margin-bottom: 40px; }
+
+        .section-title {
+            font-size: 20px; font-weight: 600; color: #24292f;
+            margin-bottom: 16px; padding-bottom: 8px;
+            border-bottom: 1px solid #d0d7de;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px; height: 20px;
+            background: #e85d2c; border-radius: 2px;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .feature-card {
+            background: #fff; border: 1px solid #d0d7de;
+            border-radius: 10px; padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover { border-color: #e85d2c; transform: translateY(-2px); }
+        .feature-card .emoji { font-size: 28px; margin-bottom: 10px; }
+        .feature-card h3 { font-size: 16px; color: #24292f; margin-bottom: 6px; }
+        .feature-card p { font-size: 13px; color: #57606a; line-height: 1.5; }
+
+        .download-section {
+            background: #fff; border: 1px solid #d0d7de;
+            border-radius: 12px; padding: 24px; text-align: center;
+        }
+
+        .download-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #1a7f37; color: #fff;
+            text-decoration: none; padding: 12px 32px;
+            border-radius: 8px; font-weight: 600; font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background: #116329; transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(26, 127, 55, 0.3);
+        }
+
+        .external-link {
+            display: inline-flex; align-items: center; gap: 4px;
+            color: #0969da; text-decoration: none; font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .external-link:hover { color: #0550ae; }
+
+        footer {
+            margin-top: 60px; padding: 32px 24px;
+            text-align: center; border-top: 1px solid #d0d7de;
+            width: 100%; color: #8c959f; font-size: 13px;
+        }
+
+        footer a { color: #0969da; text-decoration: none; }
+
+        @media (max-width: 600px) {
+            .mod-header { flex-direction: column; align-items: center; text-align: center; }
+            .tag-list { justify-content: center; }
+            .meta-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="back-btn" href="../index.html">← 返回首页</a>
+        <div class="logo">W</div>
+        <span>WBX0513 / Peach Crisp</span>
+        <div class="nav-right">
+            <div class="lang-switch">
+                <a class="active" href="index.html">中文</a>
+                <a href="../../en-us/my-minecraft-mod/index.html">English</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="mod-header">
+            <div class="mod-icon">
+                <img src="https://cdn-alt.modrinth.com/data/pn5xBpLv/2fee15f2ef14b3f5b2bbe9a4b92ebbd7d60b7f86_96.webp" alt="Peach Crisp 图标">
+            </div>
+            <div class="mod-info">
+                <h1>Peach Crisp（桃酥）</h1>
+                <p class="subtitle">为你的 Minecraft 世界增添中式风味美食</p>
+                <p class="description">
+                    一款轻量级 Fabric 模组，为 Minecraft 新增<strong>桃酥</strong>和<strong>金桃酥</strong>两种食物。
+                    桃酥食用后可获得生命恢复效果；金桃酥则能恢复更多饥饿值，同时提供急迫、抗性提升等强力 Buff，
+                    并且还能吸引猪灵！
+                </p>
+                <div class="tag-list">
+                    <span class="tag">Adventure</span>
+                    <span class="tag">Food</span>
+                    <span class="tag">Utility</span>
+                </div>
+                <a class="external-link" href="https://modrinth.com/mod/peach-crisp" target="_blank">
+                    在 Modrinth 上查看 →</a>
+            </div>
+        </div>
+
+        <div class="meta-grid">
+            <div class="meta-card"><div class="label">总下载量</div><div class="value">61</div></div>
+            <div class="meta-card"><div class="label">加载器</div><div class="value">Fabric</div></div>
+            <div class="meta-card"><div class="label">开源协议</div><div class="value">MIT</div></div>
+            <div class="meta-card"><div class="label">运行环境</div><div class="value">Client + Server</div></div>
+            <div class="meta-card"><div class="label">最新版本</div><div class="value">1.2-snapshot-7</div></div>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">模组特性</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <div class="emoji">🍪</div>
+                    <h3>桃酥</h3>
+                    <p>食用后获得生命恢复效果，在冒险中快速回血。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="emoji">✨</div>
+                    <h3>金桃酥</h3>
+                    <p>恢复更多饥饿值，同时提供急迫与抗性提升 Buff。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="emoji">🐷</div>
+                    <h3>吸引猪灵</h3>
+                    <p>金桃酥如同金质物品一样，可以吸引猪灵的注意。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="emoji">🗄️</div>
+                    <h3>客户端+服务端</h3>
+                    <p>同时支持客户端与服务端，兼容多人游戏。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">下载</h2>
+            <div class="download-section">
+                <p style="color:#57606a; margin-bottom:16px;">点击下方按钮前往 Modrinth 下载最新版本</p>
+                <a class="download-btn" href="https://modrinth.com/mod/peach-crisp" target="_blank">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H8l4-5 4 5h-3v4h-2z"/></svg>
+                    前往 Modrinth 下载
+                </a>
+                <p style="color:#8c959f; font-size:13px; margin-top:12px;">Fabric · MIT License</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Peach Crisp（桃酥）by WBX0513 · <a href="https://modrinth.com/mod/peach-crisp" target="_blank">Modrinth</a></p>
+    </footer>
+
+</body>
+</html>
