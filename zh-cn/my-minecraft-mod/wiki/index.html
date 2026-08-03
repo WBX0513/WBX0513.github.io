@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki - Peach Crisp（桃酥）| WBX0513</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f6f8fa; color: #24292f;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .navbar {
+            width: 100%; background: #fff;
+            border-bottom: 1px solid #d0d7de;
+            padding: 16px 32px;
+            display: flex; align-items: center; gap: 16px;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .navbar .back-btn {
+            color: #0969da; text-decoration: none; font-size: 14px;
+            display: flex; align-items: center; gap: 4px;
+            transition: color 0.2s;
+        }
+        .navbar .back-btn:hover { color: #0550ae; }
+
+        .navbar .logo {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #0969da;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: #fff; font-size: 18px;
+        }
+        .navbar span { font-weight: 600; font-size: 16px; color: #24292f; }
+        .navbar .nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+
+        .nav-links { display: flex; gap: 12px; }
+        .nav-links a {
+            color: #57606a; text-decoration: none; font-size: 14px;
+            padding: 4px 10px; border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+        .nav-links a:hover { color: #0969da; background: #f6f8fa; }
+        .nav-links a.active { color: #fff; background: #0969da; font-weight: 600; }
+
+        .lang-switch { display: flex; align-items: center; gap: 4px; }
+        .lang-switch a {
+            font-size: 13px; color: #57606a; text-decoration: none;
+            padding: 4px 8px; border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+        .lang-switch a:hover { color: #0969da; background: #f6f8fa; }
+        .lang-switch a.active { color: #fff; background: #0969da; font-weight: 600; }
+
+        .container { width: 100%; max-width: 900px; padding: 0 24px; margin-top: 40px; }
+
+        .wiki-header {
+            margin-bottom: 40px;
+            padding: 32px;
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .wiki-header h1 { font-size: 32px; color: #e85d2c; margin-bottom: 8px; }
+        .wiki-header .subtitle { font-size: 16px; color: #57606a; }
+
+        .wiki-sidebar {
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+        .wiki-sidebar h3 { font-size: 14px; color: #57606a; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .wiki-sidebar ul { list-style: none; }
+        .wiki-sidebar li { margin-bottom: 6px; }
+        .wiki-sidebar a {
+            color: #0969da; text-decoration: none; font-size: 14px;
+            transition: color 0.2s;
+        }
+        .wiki-sidebar a:hover { color: #0550ae; }
+
+        .section { margin-bottom: 40px; }
+        .section-title {
+            font-size: 24px; font-weight: 600; color: #24292f;
+            margin-bottom: 16px; padding-bottom: 8px;
+            border-bottom: 2px solid #e85d2c;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-title .emoji { font-size: 28px; }
+
+        .section h3 {
+            font-size: 18px; color: #24292f;
+            margin-bottom: 10px; margin-top: 24px;
+        }
+        .section h3:first-of-type { margin-top: 0; }
+
+        .section p { font-size: 15px; color: #24292f; line-height: 1.8; margin-bottom: 12px; }
+
+        .info-card {
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .info-card h4 { font-size: 16px; color: #e85d2c; margin-bottom: 8px; }
+
+        /* Crafting Table */
+        .crafting-grid {
+            display: inline-grid;
+            grid-template-columns: 32px 32px 32px;
+            grid-template-rows: 32px 32px 32px;
+            gap: 0;
+            background: #C6C6C6;
+            border: 2px solid #555;
+            padding: 4px;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+        .craft-slot {
+            width: 32px; height: 32px;
+            background: #8B8B8B;
+            border: 2px solid #373737;
+            border-top-color: #555;
+            border-left-color: #555;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .craft-slot img {
+            width: 32px; height: 32px;
+            image-rendering: pixelated;
+            position: absolute;
+        }
+        .craft-slot .slot-text {
+            font-size: 9px; text-align: center; color: #fff;
+            font-weight: bold; line-height: 1.1;
+            z-index: 1;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .craft-arrow {
+            display: inline-flex; align-items: center;
+            margin: 0 12px; font-size: 20px; color: #57606a;
+            vertical-align: middle;
+        }
+        .craft-result {
+            display: inline-flex; align-items: center; gap: 8px;
+            vertical-align: middle;
+        }
+        .craft-result .result-icon {
+            width: 32px; height: 32px;
+            background: #8B8B8B;
+            border: 2px solid #373737;
+            border-top-color: #555;
+            border-left-color: #555;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .craft-result .result-icon img {
+            width: 32px; height: 32px;
+            image-rendering: pixelated;
+        }
+        .craft-label { font-size: 14px; color: #24292f; font-weight: 600; }
+
+        .craft-wrap {
+            display: flex; align-items: center; flex-wrap: wrap;
+            gap: 8px; margin-bottom: 16px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #d0d7de;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background: #f6f8fa;
+            font-weight: 600;
+            color: #57606a;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td { border-bottom: none; }
+        td { color: #24292f; }
+
+        .note {
+            background: #fff8c5;
+            border: 1px solid #d4a72c;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 14px;
+            color: #6e4a00;
+            line-height: 1.6;
+            margin: 16px 0;
+        }
+        .note-tip {
+            background: #ddf4ff;
+            border: 1px solid #54aeff;
+            color: #0550ae;
+        }
+
+        footer {
+            margin-top: 60px; padding: 32px 24px;
+            text-align: center; border-top: 1px solid #d0d7de;
+            width: 100%; color: #8c959f; font-size: 13px;
+        }
+        footer a { color: #0969da; text-decoration: none; }
+
+        .item-display {
+            display: inline-flex; align-items: center; gap: 6px;
+            vertical-align: middle;
+        }
+        .item-display img {
+            width: 24px; height: 24px;
+            image-rendering: pixelated;
+        }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 12px 16px; }
+            .wiki-header { padding: 20px; }
+            .wiki-header h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="back-btn" href="../">← 返回模组页</a>
+        <div class="logo">W</div>
+        <span>WBX0513 / Peach Crisp Wiki</span>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="../">模组详情</a>
+                <a class="active" href="./">Wiki</a>
+            </div>
+            <div class="lang-switch">
+                <a class="active" href="./">中文</a>
+                <a href="/en-us/my-minecraft-mod/wiki/">English</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="wiki-header">
+            <h1>Peach Crisp（桃酥）Wiki</h1>
+            <p class="subtitle">完整模组指南 —— 物品、合成、获取方式、效果数据</p>
+        </div>
+
+        <nav class="wiki-sidebar">
+            <h3>目录</h3>
+            <ul>
+                <li><a href="#overview">概述</a></li>
+                <li><a href="#items">物品介绍</a></li>
+                <li><a href="#crafting">合成配方</a></li>
+                <li><a href="#obtaining">获取途径</a></li>
+                <li><a href="#effects">效果数据</a></li>
+                <li><a href="#piglins">猪灵交互</a></li>
+                <li><a href="#advancements">进度系统</a></li>
+            </ul>
+        </nav>
+
+        <!-- 概述 -->
+        <section class="section" id="overview">
+            <h2 class="section-title"><span class="emoji">📖</span> 概述</h2>
+            <p>
+                <strong>Peach Crisp（桃酥）</strong>是一款轻量级 Fabric 模组，为 Minecraft 新增两种食物：
+                <strong>桃酥</strong>和<strong>金桃酥</strong>。模组旨在丰富原版生存体验，提供新的食物选择与战斗辅助效果。
+            </p>
+            <p>
+                模组支持 Minecraft <strong>1.21.1</strong>，使用 <strong>Fabric</strong> 加载器，需在客户端和服务端同时安装，协议为 <strong>MIT</strong>。
+            </p>
+        </section>
+
+        <!-- 物品介绍 -->
+        <section class="section" id="items">
+            <h2 class="section-title"><span class="emoji">🍪</span> 物品介绍</h2>
+
+            <div class="info-card">
+                <h4><span class="item-display"><img src="/asserts/peach-crisp/peach_crisp.png" alt="">桃酥 (Peach Crisp)</span></h4>
+                <p>基础食物。食用后恢复 <strong>2 点饥饿值（1 格）</strong>和 <strong>0.2 饱和度</strong>，并获得 <strong>生命恢复 II</strong> 效果，持续 <strong>3 秒</strong>。</p>
+            </div>
+
+            <div class="info-card">
+                <h4><span class="item-display"><img src="/asserts/peach-crisp/golden_peach_crisp.png" alt="">金桃酥 (Golden Peach Crisp)</span></h4>
+                <p>桃酥的升级版。食用后恢复 <strong>8 点饥饿值（4 格）</strong>和 <strong>1.2 饱和度</strong>，并获得多种强力增益效果。同时金桃酥被列入 <code>piglin_loved</code> 标签，猪灵会对其产生兴趣。</p>
+            </div>
+        </section>
+
+        <!-- 合成配方 -->
+        <section class="section" id="crafting">
+            <h2 class="section-title"><span class="emoji">🔨</span> 合成配方</h2>
+
+            <h3>桃酥</h3>
+            <p style="color:#57606a;font-size:13px;margin-bottom:12px;">
+                十字形摆放：中间<span class="item-display"><img src="https://zh.minecraft.wiki/images/Cookie_JE2_BE2.png?format=original" alt="">曲奇</span>，
+                上下左右各1个<span class="item-display"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt="">粉红色花簇</span>。
+            </p>
+            <div class="craft-wrap">
+                <div class="crafting-grid">
+                    <div class="craft-slot"></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Cookie_JE2_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"></div>
+                </div>
+                <div class="craft-arrow">→</div>
+                <div class="craft-result">
+                    <div class="result-icon"><img src="/asserts/peach-crisp/peach_crisp.png" alt=""></div>
+                    <span class="craft-label">桃酥 ×2</span>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>材料</th><th>数量</th></tr>
+                    <tr><td>粉红色花簇 (Pink Petals)</td><td>4</td></tr>
+                    <tr><td>曲奇 (Cookie)</td><td>1</td></tr>
+                    <tr><td style="font-weight:600;">→ 产出</td><td>桃酥 ×2</td></tr>
+                </table>
+            </div>
+            <p style="color:#57606a;font-size:13px;">配方解锁条件：物品栏中有粉红色花簇、曲奇或桃酥时解锁。</p>
+
+            <h3>金桃酥</h3>
+            <div class="craft-wrap">
+                <div class="crafting-grid">
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="/asserts/peach-crisp/peach_crisp.png" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                </div>
+                <div class="craft-arrow">→</div>
+                <div class="craft-result">
+                    <div class="result-icon"><img src="/asserts/peach-crisp/golden_peach_crisp.png" alt=""></div>
+                    <span class="craft-label">金桃酥 ×1</span>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>材料</th><th>数量</th></tr>
+                    <tr><td>金锭 (Gold Ingot)</td><td>8</td></tr>
+                    <tr><td>桃酥 (Peach Crisp)</td><td>1</td></tr>
+                    <tr><td style="font-weight:600;">→ 产出</td><td>金桃酥 ×1</td></tr>
+                </table>
+            </div>
+            <div class="note note-tip">
+                合成方式与金苹果一致：8 个金锭环绕中心物品，将苹果替换为桃酥即可。
+            </div>
+            <p style="color:#57606a;font-size:13px;">配方解锁条件：物品栏中有金锭、桃酥或金桃酥时解锁。</p>
+        </section>
+
+        <!-- 获取途径 -->
+        <section class="section" id="obtaining">
+            <h2 class="section-title"><span class="emoji">🗺️</span> 获取途径</h2>
+
+            <h3>自然生成（战利品箱）</h3>
+            <p>桃酥可在以下结构生成的箱子中获取，每个箱子可能生成 1 组：</p>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>结构</th><th>每组数量</th></tr>
+                    <tr><td>废弃矿井 (Abandoned Mineshaft)</td><td>1–4</td></tr>
+                    <tr><td>地牢 (Dungeon)</td><td>1–4</td></tr>
+                    <tr><td>沙漠神殿 (Desert Temple)</td><td>2–5</td></tr>
+                    <tr><td>古城 (Ancient City)</td><td>2–5</td></tr>
+                    <tr><td>村庄 (Village)</td><td>1–3</td></tr>
+                </table>
+            </div>
+
+            <h3>村民交易</h3>
+            <p>与<strong>大师级农夫村民</strong>交易可获得桃酥：</p>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>交易项目</th><th>详情</th></tr>
+                    <tr><td>成本</td><td>5 绿宝石</td></tr>
+                    <tr><td>获取</td><td>8 个桃酥</td></tr>
+                    <tr><td>最大交易次数</td><td>24 次</td></tr>
+                    <tr><td>附赠经验</td><td>是</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 效果数据 -->
+        <section class="section" id="effects">
+            <h2 class="section-title"><span class="emoji">⚡</span> 效果数据</h2>
+
+            <h3>桃酥</h3>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>属性</th><th>数值</th></tr>
+                    <tr><td>饥饿值恢复</td><td>2 点（1 格）</td></tr>
+                    <tr><td>饱和度</td><td>0.2</td></tr>
+                    <tr><td>生命恢复 II</td><td>3 秒</td></tr>
+                </table>
+            </div>
+
+            <h3>金桃酥</h3>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>属性</th><th>数值</th></tr>
+                    <tr><td>饥饿值恢复</td><td>8 点（4 格）</td></tr>
+                    <tr><td>饱和度</td><td>1.2</td></tr>
+                    <tr><td>急迫 II (Haste II)</td><td>3 分钟</td></tr>
+                    <tr><td>抗性提升 I (Resistance I)</td><td>1 分钟</td></tr>
+                    <tr><td>生命恢复 II (Regeneration II)</td><td>10 秒</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 猪灵交互 -->
+        <section class="section" id="piglins">
+            <h2 class="section-title"><span class="emoji">🐷</span> 猪灵交互</h2>
+            <p>
+                金桃酥被列入 <code>#minecraft:piglin_loved</code> 物品标签，因此猪灵会对地上的金桃酥产生兴趣并尝试拾取。
+            </p>
+            <div class="note">
+                <strong>注意：</strong>猪灵拾取金桃酥后会检查该物品（进行以物易物动作），但<strong>不会丢弃以物易物产物</strong>，而是直接保留金桃酥。如果<strong>击杀该猪灵，金桃酥会必定掉落</strong>。
+            </div>
+        </section>
+
+        <!-- 进度系统 -->
+        <section class="section" id="advancements">
+            <h2 class="section-title"><span class="emoji">🏆</span> 进度系统</h2>
+
+            <h3>桃酥！</h3>
+            <div class="info-card">
+                <p><strong>父进度：</strong>农牧业 (husbandry/root)</p>
+                <p><strong>解锁条件：</strong>物品栏中获得桃酥</p>
+                <p><strong>进度类型：</strong>普通 (task)</p>
+            </div>
+
+            <h3>均衡饮食</h3>
+            <div class="info-card">
+                <p><strong>父进度：</strong>农牧业/开荒垦地 (husbandry/plant_seed)</p>
+                <p><strong>解锁条件：</strong>食用过包括桃酥和金桃酥在内的全部 <strong>42 种</strong>不同食物</p>
+                <p><strong>进度类型：</strong>挑战 (challenge)</p>
+                <p><strong>奖励：</strong>100 经验值</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Peach Crisp（桃酥）Wiki by WBX0513 · <a href="https://modrinth.com/mod/peach-crisp" target="_blank">Modrinth</a> · <a href="https://github.com/WBX0513/peach-crisp" target="_blank">源代码</a></p>
+    </footer>
+
+</body>
+</html>
