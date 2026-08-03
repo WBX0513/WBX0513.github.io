@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki - Peach Crisp | WBX0513</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f6f8fa; color: #24292f;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .navbar {
+            width: 100%; background: #fff;
+            border-bottom: 1px solid #d0d7de;
+            padding: 16px 32px;
+            display: flex; align-items: center; gap: 16px;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .navbar .back-btn {
+            color: #0969da; text-decoration: none; font-size: 14px;
+            display: flex; align-items: center; gap: 4px;
+            transition: color 0.2s;
+        }
+        .navbar .back-btn:hover { color: #0550ae; }
+
+        .navbar .logo {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #0969da;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: #fff; font-size: 18px;
+        }
+        .navbar span { font-weight: 600; font-size: 16px; color: #24292f; }
+        .navbar .nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+
+        .nav-links { display: flex; gap: 12px; }
+        .nav-links a {
+            color: #57606a; text-decoration: none; font-size: 14px;
+            padding: 4px 10px; border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+        .nav-links a:hover { color: #0969da; background: #f6f8fa; }
+        .nav-links a.active { color: #fff; background: #0969da; font-weight: 600; }
+
+        .lang-switch { display: flex; align-items: center; gap: 4px; }
+        .lang-switch a {
+            font-size: 13px; color: #57606a; text-decoration: none;
+            padding: 4px 8px; border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+        .lang-switch a:hover { color: #0969da; background: #f6f8fa; }
+        .lang-switch a.active { color: #fff; background: #0969da; font-weight: 600; }
+
+        .container { width: 100%; max-width: 900px; padding: 0 24px; margin-top: 40px; }
+
+        .wiki-header {
+            margin-bottom: 40px;
+            padding: 32px;
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .wiki-header h1 { font-size: 32px; color: #e85d2c; margin-bottom: 8px; }
+        .wiki-header .subtitle { font-size: 16px; color: #57606a; }
+
+        .wiki-sidebar {
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+        .wiki-sidebar h3 { font-size: 14px; color: #57606a; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .wiki-sidebar ul { list-style: none; }
+        .wiki-sidebar li { margin-bottom: 6px; }
+        .wiki-sidebar a {
+            color: #0969da; text-decoration: none; font-size: 14px;
+            transition: color 0.2s;
+        }
+        .wiki-sidebar a:hover { color: #0550ae; }
+
+        .section { margin-bottom: 40px; }
+        .section-title {
+            font-size: 24px; font-weight: 600; color: #24292f;
+            margin-bottom: 16px; padding-bottom: 8px;
+            border-bottom: 2px solid #e85d2c;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-title .emoji { font-size: 28px; }
+
+        .section h3 {
+            font-size: 18px; color: #24292f;
+            margin-bottom: 10px; margin-top: 24px;
+        }
+        .section h3:first-of-type { margin-top: 0; }
+
+        .section p { font-size: 15px; color: #24292f; line-height: 1.8; margin-bottom: 12px; }
+
+        .info-card {
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .info-card h4 { font-size: 16px; color: #e85d2c; margin-bottom: 8px; }
+
+        /* Crafting Table */
+        .crafting-grid {
+            display: inline-grid;
+            grid-template-columns: 32px 32px 32px;
+            grid-template-rows: 32px 32px 32px;
+            gap: 0;
+            background: #C6C6C6;
+            border: 2px solid #555;
+            padding: 4px;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+        .craft-slot {
+            width: 32px; height: 32px;
+            background: #8B8B8B;
+            border: 2px solid #373737;
+            border-top-color: #555;
+            border-left-color: #555;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .craft-slot img {
+            width: 32px; height: 32px;
+            image-rendering: pixelated;
+            position: absolute;
+        }
+        .craft-slot .slot-text {
+            font-size: 9px; text-align: center; color: #fff;
+            font-weight: bold; line-height: 1.1;
+            z-index: 1;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .craft-arrow {
+            display: inline-flex; align-items: center;
+            margin: 0 12px; font-size: 20px; color: #57606a;
+            vertical-align: middle;
+        }
+        .craft-result {
+            display: inline-flex; align-items: center; gap: 8px;
+            vertical-align: middle;
+        }
+        .craft-result .result-icon {
+            width: 32px; height: 32px;
+            background: #8B8B8B;
+            border: 2px solid #373737;
+            border-top-color: #555;
+            border-left-color: #555;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .craft-result .result-icon img {
+            width: 32px; height: 32px;
+            image-rendering: pixelated;
+        }
+        .craft-label { font-size: 14px; color: #24292f; font-weight: 600; }
+
+        .craft-wrap {
+            display: flex; align-items: center; flex-wrap: wrap;
+            gap: 8px; margin-bottom: 16px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #d0d7de;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background: #f6f8fa;
+            font-weight: 600;
+            color: #57606a;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td { border-bottom: none; }
+        td { color: #24292f; }
+
+        .note {
+            background: #fff8c5;
+            border: 1px solid #d4a72c;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 14px;
+            color: #6e4a00;
+            line-height: 1.6;
+            margin: 16px 0;
+        }
+        .note-tip {
+            background: #ddf4ff;
+            border: 1px solid #54aeff;
+            color: #0550ae;
+        }
+
+        footer {
+            margin-top: 60px; padding: 32px 24px;
+            text-align: center; border-top: 1px solid #d0d7de;
+            width: 100%; color: #8c959f; font-size: 13px;
+        }
+        footer a { color: #0969da; text-decoration: none; }
+
+        .item-display {
+            display: inline-flex; align-items: center; gap: 6px;
+            vertical-align: middle;
+        }
+        .item-display img {
+            width: 24px; height: 24px;
+            image-rendering: pixelated;
+        }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 12px 16px; }
+            .wiki-header { padding: 20px; }
+            .wiki-header h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="back-btn" href="../">← Back to Mod</a>
+        <div class="logo">W</div>
+        <span>WBX0513 / Peach Crisp Wiki</span>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="../">Mod Details</a>
+                <a class="active" href="./">Wiki</a>
+            </div>
+            <div class="lang-switch">
+                <a href="/zh-cn/my-minecraft-mod/wiki/">中文</a>
+                <a class="active" href="./">English</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="wiki-header">
+            <h1>Peach Crisp Wiki</h1>
+            <p class="subtitle">Complete Mod Guide — Items, Crafting, Obtaining &amp; Effects</p>
+        </div>
+
+        <nav class="wiki-sidebar">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#items">Items</a></li>
+                <li><a href="#crafting">Crafting Recipes</a></li>
+                <li><a href="#obtaining">Obtaining</a></li>
+                <li><a href="#effects">Effect Data</a></li>
+                <li><a href="#piglins">Piglin Interaction</a></li>
+                <li><a href="#advancements">Advancements</a></li>
+            </ul>
+        </nav>
+
+        <!-- Overview -->
+        <section class="section" id="overview">
+            <h2 class="section-title"><span class="emoji">📖</span> Overview</h2>
+            <p>
+                <strong>Peach Crisp</strong> is a lightweight Fabric mod that adds two food items to Minecraft:
+                <strong>Peach Crisp</strong> and <strong>Golden Peach Crisp</strong>.
+                The mod enriches vanilla survival gameplay with new food options and combat-supporting effects.
+            </p>
+            <p>
+                Supports Minecraft <strong>1.21.1</strong>, uses the <strong>Fabric</strong> loader,
+                requires installation on both client and server, and is licensed under <strong>MIT</strong>.
+            </p>
+        </section>
+
+        <!-- Items -->
+        <section class="section" id="items">
+            <h2 class="section-title"><span class="emoji">🍪</span> Items</h2>
+
+            <div class="info-card">
+                <h4><span class="item-display"><img src="/asserts/peach-crisp/peach_crisp.png" alt="">Peach Crisp</span></h4>
+                <p>A basic food item. Restores <strong>2 hunger points (1 bar)</strong> and <strong>0.2 saturation</strong> when eaten,
+                and grants <strong>Regeneration II</strong> for <strong>3 seconds</strong>.</p>
+            </div>
+
+            <div class="info-card">
+                <h4><span class="item-display"><img src="/asserts/peach-crisp/golden_peach_crisp.png" alt="">Golden Peach Crisp</span></h4>
+                <p>An upgraded version of Peach Crisp. Restores <strong>8 hunger points (4 bars)</strong> and <strong>1.2 saturation</strong>
+                when eaten, and grants multiple powerful buffs. Golden Peach Crisp is included in the
+                <code>#minecraft:piglin_loved</code> tag, so Piglins are attracted to it.</p>
+            </div>
+        </section>
+
+        <!-- Crafting Recipes -->
+        <section class="section" id="crafting">
+            <h2 class="section-title"><span class="emoji">🔨</span> Crafting Recipes</h2>
+
+            <h3>Peach Crisp</h3>
+            <p style="color:#57606a;font-size:13px;margin-bottom:12px;">
+                Cross pattern: <span class="item-display"><img src="https://zh.minecraft.wiki/images/Cookie_JE2_BE2.png?format=original" alt="">Cookie</span> in center,
+                <span class="item-display"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt="">Pink Petals</span> above, below, left, and right.
+            </p>
+            <div class="craft-wrap">
+                <div class="crafting-grid">
+                    <div class="craft-slot"></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Cookie_JE2_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Invicon_Pink_Petals.png?b89ae" alt=""></div>
+                    <div class="craft-slot"></div>
+                </div>
+                <div class="craft-arrow">→</div>
+                <div class="craft-result">
+                    <div class="result-icon"><img src="/asserts/peach-crisp/peach_crisp.png" alt=""></div>
+                    <span class="craft-label">Peach Crisp ×2</span>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>Ingredient</th><th>Amount</th></tr>
+                    <tr><td>Pink Petals</td><td>4</td></tr>
+                    <tr><td>Cookie</td><td>1</td></tr>
+                    <tr><td style="font-weight:600;">→ Output</td><td>Peach Crisp ×2</td></tr>
+                </table>
+            </div>
+            <p style="color:#57606a;font-size:13px;">Recipe unlocked when the player has Pink Petals, Cookie, or Peach Crisp in their inventory.</p>
+
+            <h3>Golden Peach Crisp</h3>
+            <div class="craft-wrap">
+                <div class="crafting-grid">
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="/asserts/peach-crisp/peach_crisp.png" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                    <div class="craft-slot"><img src="https://zh.minecraft.wiki/images/Gold_Ingot_JE4_BE2.png?format=original" alt=""></div>
+                </div>
+                <div class="craft-arrow">→</div>
+                <div class="craft-result">
+                    <div class="result-icon"><img src="/asserts/peach-crisp/golden_peach_crisp.png" alt=""></div>
+                    <span class="craft-label">Golden Peach Crisp ×1</span>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>Ingredient</th><th>Amount</th></tr>
+                    <tr><td>Gold Ingot</td><td>8</td></tr>
+                    <tr><td>Peach Crisp</td><td>1</td></tr>
+                    <tr><td style="font-weight:600;">→ Output</td><td>Golden Peach Crisp ×1</td></tr>
+                </table>
+            </div>
+            <div class="note note-tip">
+                Follows the same pattern as the Golden Apple recipe — 8 gold ingots surrounding the center item,
+                with Apple replaced by Peach Crisp.
+            </div>
+            <p style="color:#57606a;font-size:13px;">Recipe unlocked when the player has Gold Ingot, Peach Crisp, or Golden Peach Crisp in their inventory.</p>
+        </section>
+
+        <!-- Obtaining -->
+        <section class="section" id="obtaining">
+            <h2 class="section-title"><span class="emoji">🗺️</span> Obtaining</h2>
+
+            <h3>Natural Generation (Loot Chests)</h3>
+            <p>Peach Crisps can be found in chests generated in the following structures, up to one stack per chest:</p>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>Structure</th><th>Stack Size</th></tr>
+                    <tr><td>Abandoned Mineshaft</td><td>1–4</td></tr>
+                    <tr><td>Dungeon</td><td>1–4</td></tr>
+                    <tr><td>Desert Temple</td><td>2–5</td></tr>
+                    <tr><td>Ancient City</td><td>2–5</td></tr>
+                    <tr><td>Village</td><td>1–3</td></tr>
+                </table>
+            </div>
+
+            <h3>Villager Trading</h3>
+            <p>Trade with a <strong>Master Farmer</strong> villager to obtain Peach Crisps:</p>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>Trade</th><th>Details</th></tr>
+                    <tr><td>Cost</td><td>5 Emeralds</td></tr>
+                    <tr><td>Reward</td><td>8 Peach Crisps</td></tr>
+                    <tr><td>Max Uses</td><td>24</td></tr>
+                    <tr><td>Rewards XP</td><td>Yes</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- Effect Data -->
+        <section class="section" id="effects">
+            <h2 class="section-title"><span class="emoji">⚡</span> Effect Data</h2>
+
+            <h3>Peach Crisp</h3>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>Property</th><th>Value</th></tr>
+                    <tr><td>Hunger Restored</td><td>2 points (1 bar)</td></tr>
+                    <tr><td>Saturation</td><td>0.2</td></tr>
+                    <tr><td>Regeneration II</td><td>3 seconds</td></tr>
+                </table>
+            </div>
+
+            <h3>Golden Peach Crisp</h3>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>Property</th><th>Value</th></tr>
+                    <tr><td>Hunger Restored</td><td>8 points (4 bars)</td></tr>
+                    <tr><td>Saturation</td><td>1.2</td></tr>
+                    <tr><td>Haste II</td><td>3 minutes</td></tr>
+                    <tr><td>Resistance I</td><td>1 minute</td></tr>
+                    <tr><td>Regeneration II</td><td>10 seconds</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- Piglin Interaction -->
+        <section class="section" id="piglins">
+            <h2 class="section-title"><span class="emoji">🐷</span> Piglin Interaction</h2>
+            <p>
+                Golden Peach Crisp is listed under the <code>#minecraft:piglin_loved</code> item tag,
+                meaning Piglins will notice Golden Peach Crisps on the ground and attempt to pick them up.
+            </p>
+            <div class="note">
+                <strong>Note:</strong> When a Piglin picks up a Golden Peach Crisp, it will examine the item (performing the bartering animation),
+                but will <strong>not drop any bartering loot</strong> — it simply keeps the Golden Peach Crisp.
+                If you <strong>kill that Piglin, the Golden Peach Crisp is guaranteed to drop</strong>.
+            </div>
+        </section>
+
+        <!-- Advancements -->
+        <section class="section" id="advancements">
+            <h2 class="section-title"><span class="emoji">🏆</span> Advancements</h2>
+
+            <h3>Peach Crisp!</h3>
+            <div class="info-card">
+                <p><strong>Parent:</strong> Husbandry (husbandry/root)</p>
+                <p><strong>Unlock Condition:</strong> Obtain a Peach Crisp in your inventory</p>
+                <p><strong>Frame Type:</strong> Task</p>
+            </div>
+
+            <h3>A Balanced Diet</h3>
+            <div class="info-card">
+                <p><strong>Parent:</strong> Husbandry / A Seedy Place (husbandry/plant_seed)</p>
+                <p><strong>Unlock Condition:</strong> Eat all <strong>42</strong> different food items, including Peach Crisp and Golden Peach Crisp</p>
+                <p><strong>Frame Type:</strong> Challenge</p>
+                <p><strong>Reward:</strong> 100 experience</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Peach Crisp Wiki by WBX0513 · <a href="https://modrinth.com/mod/peach-crisp" target="_blank">Modrinth</a> · <a href="https://github.com/WBX0513/peach-crisp" target="_blank">Source Code</a></p>
+    </footer>
+
+</body>
+</html>
