@@ -41,6 +41,15 @@
 
         .navbar .nav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
 
+        .nav-links { display: flex; gap: 12px; }
+        .nav-links a {
+            color: #57606a; text-decoration: none; font-size: 14px;
+            padding: 4px 10px; border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+        .nav-links a:hover { color: #0969da; background: #f6f8fa; }
+        .nav-links a.active { color: #fff; background: #0969da; font-weight: 600; }
+
         .lang-switch { display: flex; align-items: center; gap: 4px; }
 
         .lang-switch a {
@@ -179,6 +188,10 @@
         <div class="logo">W</div>
         <span>WBX0513 / Peach Crisp</span>
         <div class="nav-right">
+            <div class="nav-links">
+                <a class="active" href="./">模组详情</a>
+                <a href="wiki/">Wiki</a>
+            </div>
             <div class="lang-switch">
                 <a class="active" href="./">中文</a>
                 <a href="/en-us/my-minecraft-mod/">English</a>
