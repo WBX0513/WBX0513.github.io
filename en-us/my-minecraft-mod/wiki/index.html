@@ -252,8 +252,8 @@
                 <a class="active" href="./">Wiki</a>
             </div>
             <div class="lang-switch">
-                <a href="/zh-cn/my-minecraft-mod/wiki/">中文</a>
-                <a class="active" href="./">English</a>
+                <a href="/zh-cn/my-minecraft-mod/wiki/" data-lang="zh">中文</a>
+                <a class="active" href="./" data-lang="en">English</a>
             </div>
         </div>
     </nav>
@@ -476,6 +476,19 @@
         <p>Peach Crisp Wiki by WBX0513 · <a href="https://modrinth.com/mod/peach-crisp" target="_blank">Modrinth</a> · <a href="https://github.com/WBX0513/peach-crisp" target="_blank">Source Code</a></p>
     </footer>
 
+<script>
+    (function () {
+        var hash = location.hash;
+        if (!hash) return;
+        var links = document.querySelectorAll('.lang-switch a');
+        for (var i = 0; i < links.length; i++) {
+            var href = links[i].getAttribute('href');
+            if (href && href.endsWith('/')) {
+                links[i].href = href + 'index.html' + hash;
+            }
+        }
+    })();
+</script>
 </body>
 </html>
 
