@@ -204,9 +204,9 @@
         </section>
 
         <div class="stats">
-            <div class="stat-item"><div class="number">0</div><div class="label">Repositories</div></div>
-            <div class="stat-item"><div class="number">0</div><div class="label">Followers</div></div>
-            <div class="stat-item"><div class="number">0</div><div class="label">Following</div></div>
+            <div class="stat-item"><div class="number" id="stat-repos">...</div><div class="label">仓库</div></div>
+            <div class="stat-item"><div class="number" id="stat-followers">...</div><div class="label">关注者</div></div>
+            <div class="stat-item"><div class="number" id="stat-following">...</div><div class="label">正在关注</div></div>
         </div>
 
         <section class="section">
@@ -238,6 +238,19 @@
     </footer>
 
     <script>
+        fetch('https://api.github.com/users/WBX0513')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                document.getElementById('stat-repos').textContent = data.public_repos != null ? data.public_repos : '-';
+                document.getElementById('stat-followers').textContent = data.followers != null ? data.followers : '-';
+                document.getElementById('stat-following').textContent = data.following != null ? data.following : '-';
+            })
+            .catch(function() {
+                document.getElementById('stat-repos').textContent = '-';
+                document.getElementById('stat-followers').textContent = '-';
+                document.getElementById('stat-following').textContent = '-';
+            });
+
         fetch('https://api.modrinth.com/v2/project/peach-crisp')
             .then(function(r) { return r.json(); })
             .then(function(data) {
