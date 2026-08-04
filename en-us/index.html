@@ -217,7 +217,7 @@
                     <p>Adds Peach Crisp and Golden Peach Crisp food items to Minecraft, supports Fabric</p>
                     <div class="repo-meta">
                         <span>☕ Java</span>
-                        <span>⬇ 61 downloads</span>
+                        <span class="mod-downloads">⬇ Loading...</span>
                     </div>
                 </a>
             </div>
@@ -236,6 +236,23 @@
     <footer>
         <p>Built with ❤️ by <a href="https://github.com/WBX0513" target="_blank">WBX0513</a> &copy; 2026</p>
     </footer>
+
+    <script>
+        fetch('https://api.modrinth.com/v2/project/peach-crisp')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var els = document.getElementsByClassName('mod-downloads');
+                for (var i = 0;i < els.length;i++) {
+                    els[i].textContent = '⬇ ' + data.downloads.toLocaleString() + ' downloads';
+                }
+            })
+            .catch(function() {
+                var els = document.getElementsByClassName('mod-downloads');
+                for (var i = 0;i < els.length;i++) {
+                    els[i].textContent = '';
+                }
+            });
+    </script>
 
     <script>
         fetch('https://api.github.com/users/WBX0513')
